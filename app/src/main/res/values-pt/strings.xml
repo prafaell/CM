@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CM</string>
+    <string name="CriarNota">Criar Nota</string>
+    <string name="MinhasNotas">Minhas Notas</string>
+    <string name="Login">Login</string>
+    <string name="SignUp">Registar</string>
+    <string name="Reportar">Reportar Situação</string>
+    <string name="Mapa">Visualizar Mapa</string>
+    <string name="Logout">Logout</string>
+    <string name="User">Utilizador:</string>
+    <string name="Pw">" Senha:"</string>
+    <string name="HintUser">Escreva aqui o seu nome de utilizador</string>
+    <string name="HintPW">Senha</string>
+</resources>

@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">CM</string>
+    <string name="CriarNota">Create Note</string>
+    <string name="MinhasNotas">My Notes</string>
+    <string name="Login">Login</string>
+    <string name="SignUp">Sign Up</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="Reportar">Report Problem</string>
+    <string name="Mapa">Show Map</string>
+    <string name="Logout">Logout</string>
+    <string name="User">User:</string>
+    <string name="Pw">Password:</string>
+    <string name="HintUser">Write here your username</string>
+    <string name="HintPW">Password</string>
 </resources>
