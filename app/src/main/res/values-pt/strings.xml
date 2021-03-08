@@ -10,6 +10,9 @@
     <string name="Logout">Logout</string>
     <string name="User">Utilizador:</string>
     <string name="Pw">" Senha:"</string>
-    <string name="HintUser">Escreva aqui o seu nome de utilizador</string>
+    <string name="HintUser">Utilizador</string>
     <string name="HintPW">Senha</string>
+    <string name="title_activity_menu_logado">MENU123</string>
+    <string name="first_fragment_label">label</string>
+    <string name="second_fragment_label">label2</string>
 </resources>

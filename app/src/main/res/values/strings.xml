@@ -11,6 +11,9 @@
     <string name="Logout">Logout</string>
     <string name="User">User:</string>
     <string name="Pw">Password:</string>
-    <string name="HintUser">Write here your username</string>
+    <string name="HintUser">Username</string>
     <string name="HintPW">Password</string>
+    <string name="title_activity_menu_logado">MENU123</string>
+    <string name="first_fragment_label">label</string>
+    <string name="second_fragment_label">label2</string>
 </resources>
