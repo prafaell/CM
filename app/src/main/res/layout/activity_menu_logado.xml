@@ -69,6 +69,7 @@
         android:layout_marginTop="60dp"
         android:background="#FDFDFD"
         android:backgroundTint="#B1AEAE"
+        android:onClick="myNotes"
         android:text="@string/MinhasNotas"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"

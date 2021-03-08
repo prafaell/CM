@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CM">
-        <activity android:name=".MenuSignUp"></activity>
+        <activity android:name=".ListaNotas"></activity>
+        <activity android:name=".MenuSignUp" />
         <activity android:name=".MenuLogin" />
         <activity
             android:name=".MenuLogado"

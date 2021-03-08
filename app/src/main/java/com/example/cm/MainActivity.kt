@@ -15,4 +15,9 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this,MenuLogin::class.java)
         startActivity(intent)
     }
+
+    fun myNotes(view: View) {
+        val intent = Intent(this,ListaNotas::class.java)
+        startActivity(intent)
+    }
 }
