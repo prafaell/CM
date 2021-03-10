@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
-        android:text="Insert item"
-        android:onClick="insert"></Button>
+        android:text="@string/inserirnota"
+        android:onClick="inserir"></Button>
 
 </RelativeLayout>

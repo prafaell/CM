@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:backgroundTint="#B1AEAE"
+        android:onClick="logout"
         android:text="@string/Logout"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

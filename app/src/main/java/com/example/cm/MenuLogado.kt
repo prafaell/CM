@@ -18,4 +18,9 @@ class MenuLogado : AppCompatActivity() {
         val intent = Intent(this,ListaNotas::class.java)
         startActivity(intent)
     }
+
+    fun logout(view: View) {
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+    }
 }

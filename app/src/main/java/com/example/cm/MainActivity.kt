@@ -20,4 +20,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this,ListaNotas::class.java)
         startActivity(intent)
     }
+
+
 }

@@ -15,4 +15,8 @@
     <string name="title_activity_menu_logado">MENU123</string>
     <string name="first_fragment_label">label</string>
     <string name="second_fragment_label">label2</string>
+    <string name="inserirnota">Nova Nota</string>
+    <string name="nomenota">Nome</string>
+    <string name="descricaonota">Descrição</string>
+    <string name="criar">Criar</string>
 </resources>
