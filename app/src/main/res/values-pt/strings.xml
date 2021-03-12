@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CM</string>
+    <string name="app_name">SmartCity</string>
     <string name="CriarNota">Criar Nota</string>
     <string name="MinhasNotas">Minhas Notas</string>
     <string name="Login">Login</string>

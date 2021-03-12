@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CM</string>
+    <string name="app_name">SmartCity</string>
     <string name="CriarNota">Create Note</string>
     <string name="MinhasNotas">My Notes</string>
     <string name="Login">Login</string>
