@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,19 +40,21 @@ class ListaNotas : AppCompatActivity() {
             notas?.let { adapter.setNotas(it) }
         })
 
-
-
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        Toast.makeText(this,"hello",Toast.LENGTH_LONG).show()
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
             val pnome = data?.getStringExtra(criarnota.EXTRA_REPLY_NOME)
             val pdescricao= data?.getStringExtra(criarnota.EXTRA_REPLY_DESCRICAO)
 
             if (pnome!= null && pdescricao != null) {
+                Toast.makeText(this,"gg",Toast.LENGTH_LONG).show()
                 val nota = Notas(nome = pnome, descricao = pdescricao)
                 notaViewModel.insert(nota)
+                Toast.makeText(this,"ALELUIA",Toast.LENGTH_LONG).show()
             }
 
         } else {

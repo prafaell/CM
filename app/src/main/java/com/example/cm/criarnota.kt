@@ -8,6 +8,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import kotlinx.android.synthetic.main.recyclerline.*
 
 class criarnota : AppCompatActivity() {
@@ -38,8 +39,8 @@ class criarnota : AppCompatActivity() {
 
     }
     companion object {
-        const val EXTRA_REPLY_NOME = "com.example.android.nome"
-        const val EXTRA_REPLY_DESCRICAO = "com.example.android.descricao"
+        const val EXTRA_REPLY_NOME = "nome"
+        const val EXTRA_REPLY_DESCRICAO = "descricao"
     }
 
 }

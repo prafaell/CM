@@ -29,9 +29,6 @@ public abstract class NotasDB : RoomDatabase() {
             INSTANCE?.let { database ->
                 scope.launch {
                     var notasDao = database.NotaDao()
-
-
-                    // Add sample cities.
                 }
             }
         }
@@ -52,7 +49,7 @@ public abstract class NotasDB : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     NotasDB::class.java,
-                    "notaasdb"
+                    "Nota_tabela"
                 )
                     //estratégia de destruição
                     .fallbackToDestructiveMigration()

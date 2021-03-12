@@ -12,8 +12,8 @@ class NotasRepository(private val notaDao: NotaDao) {
     // Observed LiveData will notify the observer when the data has changed.
     val allNotas: LiveData<List<Notas>> = notaDao.getTodasNotas()
 
-    suspend fun insert(Notas: Notas) {
-        notaDao.insert(Notas)
+    suspend fun insert(nota: Notas) {
+        notaDao.insert(nota)
     }
 
 
