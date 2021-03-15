@@ -11,8 +11,7 @@
         android:id="@+id/button2"
         android:layout_width="180dp"
         android:layout_height="71dp"
-        android:layout_marginTop="60dp"
-        android:background="#FFFFFF"
+        android:layout_marginTop="100dp"
         android:backgroundTint="#B1AEAE"
         android:text="@string/Mapa"
         android:textColor="#000000"
@@ -26,7 +25,6 @@
         android:layout_width="180dp"
         android:layout_height="71dp"
         android:layout_marginTop="24dp"
-        android:background="#FDFDFD"
         android:backgroundTint="#B1AEAE"
         android:text="@string/Reportar"
         android:textColor="#000000"
@@ -50,25 +48,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="180dp"
-        android:layout_height="71dp"
-        android:layout_marginTop="60dp"
-        android:background="#FDFDFD"
-        android:backgroundTint="#B1AEAE"
-        android:text="@string/CriarNota"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
-
-    <Button
         android:id="@+id/button5"
         android:layout_width="180dp"
         android:layout_height="71dp"
-        android:layout_marginTop="60dp"
-        android:background="#FDFDFD"
+        android:layout_marginTop="100dp"
         android:backgroundTint="#B1AEAE"
         android:onClick="myNotes"
         android:text="@string/MinhasNotas"
@@ -76,6 +59,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.lifecycle.Observer
@@ -16,7 +17,7 @@ import com.example.cm.entities.Notas
 import com.example.cm.viewmodel.NotaViewModel
 
 
-class ListaNotas : AppCompatActivity() {
+class ListaNotas : AppCompatActivity(),LineAdapter.CallbackInterface {
 
 
     private lateinit var notaViewModel: NotaViewModel
@@ -29,7 +30,7 @@ class ListaNotas : AppCompatActivity() {
 
         // recycler view
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        val adapter = LineAdapter(this)
+        val adapter = LineAdapter(this,this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -40,12 +41,22 @@ class ListaNotas : AppCompatActivity() {
             notas?.let { adapter.setNotas(it) }
         })
 
+        val button = findViewById<Button>(R.id.butaoNovo)
+
+        button.setOnClickListener {
+            val intent = Intent(this@ListaNotas, criarnota::class.java)
+            startActivityForResult(intent, newWordActivityRequestCode)
+        }
+
+    }
+
+     override fun passResultCallback(message: Int?) {
+        notaViewModel.deleteByID(message)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        Toast.makeText(this,"hello",Toast.LENGTH_LONG).show()
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
             val pnome = data?.getStringExtra(criarnota.EXTRA_REPLY_NOME)
             val pdescricao= data?.getStringExtra(criarnota.EXTRA_REPLY_DESCRICAO)
@@ -54,7 +65,6 @@ class ListaNotas : AppCompatActivity() {
                 Toast.makeText(this,"gg",Toast.LENGTH_LONG).show()
                 val nota = Notas(nome = pnome, descricao = pdescricao)
                 notaViewModel.insert(nota)
-                Toast.makeText(this,"ALELUIA",Toast.LENGTH_LONG).show()
             }
 
         } else {
@@ -63,11 +73,5 @@ class ListaNotas : AppCompatActivity() {
                 "ERROU",
                 Toast.LENGTH_LONG).show()
         }
-    }
-
-
-    fun inserir(view: View) {
-        val intent = Intent(this,criarnota::class.java)
-        startActivity(intent)
     }
 }

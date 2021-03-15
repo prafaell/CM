@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CM">
-        <activity android:name=".criarnota"></activity>
+        <activity android:name=".EcraAlterar"></activity>
+        <activity android:name=".criarnota" />
         <activity android:name=".dataclasses.ListaNotas" />
         <activity android:name=".ListaNotas" />
         <activity android:name=".MenuSignUp" />
