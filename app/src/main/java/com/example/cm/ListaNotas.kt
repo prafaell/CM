@@ -52,6 +52,7 @@ class ListaNotas : AppCompatActivity(),LineAdapter.CallbackInterface {
 
      override fun passResultCallback(message: Int?) {
         notaViewModel.deleteByID(message)
+        Toast.makeText(this,"Eliminado com sucesso", LENGTH_LONG).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -62,16 +63,11 @@ class ListaNotas : AppCompatActivity(),LineAdapter.CallbackInterface {
             val pdescricao= data?.getStringExtra(criarnota.EXTRA_REPLY_DESCRICAO)
 
             if (pnome!= null && pdescricao != null) {
-                Toast.makeText(this,"gg",Toast.LENGTH_LONG).show()
                 val nota = Notas(nome = pnome, descricao = pdescricao)
                 notaViewModel.insert(nota)
             }
 
         } else {
-            Toast.makeText(
-                applicationContext,
-                "ERROU",
-                Toast.LENGTH_LONG).show()
         }
     }
 }

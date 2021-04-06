@@ -20,4 +20,5 @@
     <string name="descricaonota">Descrição</string>
     <string name="criar">Criar</string>
     <string name="Guardar">Guardar</string>
+    <string name="delete">Eliminado com sucesso</string>
 </resources>

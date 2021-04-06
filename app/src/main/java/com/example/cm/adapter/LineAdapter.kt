@@ -70,7 +70,6 @@ class LineAdapter internal constructor(
         }
 
         holder.button2.setOnClickListener {
-            //Set your codes about intent here
             val id = current.id
             callbackInterface.passResultCallback(id)
         }

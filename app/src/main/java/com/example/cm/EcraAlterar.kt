@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.cm.adapter.DESC
 import com.example.cm.adapter.ID
@@ -40,14 +41,15 @@ class EcraAlterar : AppCompatActivity() {
         notadesc = findViewById(R.id.descnovo)
         var message3 = intent.getIntExtra(ID, 0)
         val replyIntent = Intent()
-        if (TextUtils.isEmpty(notatitulo.text) || TextUtils.isEmpty(notadesc.text))  {
-            setResult(Activity.RESULT_CANCELED, replyIntent)
+        if (TextUtils.isEmpty(notatitulo.text))  {
+            Toast.makeText(this,"Não o titulo vazio", Toast.LENGTH_LONG).show()
         } else {
             val nota = Notas(id = message3, nome = notatitulo.text.toString(), descricao = notadesc.text.toString() )
             notaViewModel.update(nota)
-
+            Toast.makeText(this,"Alterado com sucesso", Toast.LENGTH_LONG).show()
+            finish()
         }
-        finish()
+
 
     }
 }
