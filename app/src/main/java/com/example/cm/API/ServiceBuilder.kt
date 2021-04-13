@@ -1,16 +1,23 @@
 package com.example.cm.API
 
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 object ServiceBuilder {
     private val client = OkHttpClient.Builder().build()
 
+    var gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://smartcitycm2021.000webhostapp.com/myslim/")
-        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl("https://smartcitycm2021.000webhostapp.com/")
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .client(client)
         .build()
 

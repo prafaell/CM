@@ -6,9 +6,9 @@ import retrofit2.http.*
 
 
 interface EndPoints {
-    @GET("/api/problemas")
+    @GET("myslim/api/problemas")
     fun getReports(): Call<List<Problema>>
 
-    @GET("/api/utilizadores")
+    @GET("myslim/api/utilizadores")
     fun getUsers(): Call<List<User>>
 }
