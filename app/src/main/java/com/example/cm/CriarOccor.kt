@@ -9,20 +9,20 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 
-class criarnota : AppCompatActivity() {
+class CriarOccor : AppCompatActivity() {
 
     private lateinit var nome: EditText
     private lateinit var descricao: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_criarnota)
+        setContentView(R.layout.activity_criar_occor)
 
 
         nome = findViewById(R.id.titulo)
         descricao = findViewById(R.id.descr)
 
-        val button = findViewById<Button>(R.id.button6)
+        val button = findViewById<Button>(R.id.button7)
         button.setOnClickListener {
             val replyIntent = Intent()
             if (TextUtils.isEmpty(nome.text)) {
@@ -42,5 +42,7 @@ class criarnota : AppCompatActivity() {
         const val EXTRA_REPLY_NOME = "nome"
         const val EXTRA_REPLY_DESCRICAO = "descricao"
     }
+
+
 
 }
