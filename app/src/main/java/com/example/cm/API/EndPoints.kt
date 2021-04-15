@@ -9,5 +9,4 @@ interface EndPoints {
     @GET("myslim/api/problemas")
     fun getReports(): Call<List<Problema>>
 
-
 }
