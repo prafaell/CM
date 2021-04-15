@@ -9,6 +9,6 @@ interface EndPoints {
     @GET("/api/problemas")
     fun getReports(): Call<List<Problema>>
 
-    @GET("/api/utilizadores")
-    fun getUsers(): Call<List<User>>
+    @GET("/api/login")
+    fun getLogin(): Call<List<User>>
 }
