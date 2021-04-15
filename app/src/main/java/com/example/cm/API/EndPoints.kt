@@ -9,6 +9,7 @@ interface EndPoints {
     @GET("/api/problemas")
     fun getReports(): Call<List<Problema>>
 
-    @GET("/api/login")
-    fun getLogin(): Call<List<User>>
+    @FormUrlEncoded
+    @POST("/api/login")
+    fun getLogin(@Field("user") first: String?,@Field("pw") second: String?): Call<User>
 }

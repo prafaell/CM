@@ -3,11 +3,14 @@ package com.example.cm
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import com.example.cm.API.EndPoints
 import com.example.cm.API.Problema
 import com.example.cm.API.ServiceBuilder
+import com.example.cm.API.User
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
@@ -24,27 +27,29 @@ class MenuLogin : AppCompatActivity() {
 
     fun logar(view: View) {
         val intent = Intent(this,MenuLogado::class.java)
-        startActivity(intent)
+
+        val user = findViewById<EditText>(R.id.editTextTextPersonName).text.toString();
+        val pw = findViewById<EditText>(R.id.editTextTextPassword).text.toString();
+
+        Log.d("USER",user);
+        Log.d("pw",pw)
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call = request.getLogin(user,pw);
+        call.enqueue(object : Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                if (response.isSuccessful){
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                Toast.makeText(this@MenuLogin, "${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+
+
     }
 
-    val request = ServiceBuilder.buildService(EndPoints::class.java)
-    val call = request.getLogin()
 
-
-    call.enqueue(object : Callback<List<Problema>> {
-        override fun onResponse(call: Call<List<Problema>>, response: Response<List<Problema>>) {
-            if (response.isSuccessful){
-                problemas = response.body()!!
-                for (problema in problemas){
-                    position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
-                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo))
-                }
-
-            }
-        }
-        override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
-            Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
-        }
-    })
 
 }
