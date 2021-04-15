@@ -42,7 +42,7 @@ class EcraAlterar : AppCompatActivity() {
         var message3 = intent.getIntExtra(ID, 0)
         val replyIntent = Intent()
         if (TextUtils.isEmpty(notatitulo.text))  {
-            Toast.makeText(this,"Não o titulo vazio", Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Titulo vazio", Toast.LENGTH_LONG).show()
         } else {
             val nota = Notas(id = message3, nome = notatitulo.text.toString(), descricao = notadesc.text.toString() )
             notaViewModel.update(nota)

@@ -1,8 +1,17 @@
 package com.example.cm
 
+import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.example.cm.API.EndPoints
+import com.example.cm.API.Problema
+import com.example.cm.API.ServiceBuilder
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -10,10 +19,16 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    private lateinit var problemas: List<Problema>
+    private lateinit var lastLocation: Location
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +37,29 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call = request.getReports()
+        var position: LatLng
+
+        call.enqueue(object : Callback<List<Problema>> {
+            override fun onResponse(call: Call<List<Problema>>, response: Response<List<Problema>>) {
+                if (response.isSuccessful){
+                    problemas = response.body()!!
+                    for (problema in problemas){
+                        position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                        mMap.addMarker(MarkerOptions().position(position).title(problema.titulo))
+                    }
+
+                }
+            }
+            override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     /**
@@ -30,15 +68,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * it inside the SupportMapFragment. This method will onlya be triggered once the user has
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+       setUpMap()
+    }
+
+    companion object {
+        // add to implement last known location
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        //added to implement location periodic updates
+        private const val REQUEST_CHECK_SETTINGS = 2
+    }
+
+    fun setUpMap(){
+        if(ActivityCompat.checkSelfPermission(this,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+
+            return
+        }else{
+            mMap.isMyLocationEnabled = true
+
+            fusedLocationClient.lastLocation.addOnSuccessListener(this){
+                location ->
+                if(location != null){
+                    lastLocation = location;
+                    val currentLatLong = LatLng(location.latitude,location.longitude)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong, 12f))
+                }
+            }
+        }
     }
 }
