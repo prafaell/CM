@@ -38,8 +38,13 @@ class MenuLogin : AppCompatActivity() {
         call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful){
-                    startActivity(intent)
-                    finish()
+                    if(response.body()!!.status){
+                        startActivity(intent)
+                        finish()
+                    }else{
+                        Toast.makeText(this@MenuLogin, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                    }
+
                 }
             }
             override fun onFailure(call: Call<User>, t: Throwable) {

@@ -3,7 +3,9 @@ package com.example.cm.API
 data class User(
     val id: Int,
     val user: String,
-    val pw: String
+    val pw: String,
+    val status: Boolean,
+    val MSG: String
 )
 
 data class Problema(
