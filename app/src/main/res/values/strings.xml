@@ -23,5 +23,7 @@
     <string name="Guardar">Save</string>
     <string name="delete">Delete sucessfuly</string>
     <string name="foto">Take picture</string>
+    <string name="userlog">userlog</string>
+    <string name="preference_file_key">file1</string>
     <string name="title_activity_maps">Map</string>
 </resources>

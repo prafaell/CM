@@ -1,6 +1,8 @@
 package com.example.cm
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -22,10 +24,24 @@ class MenuLogin : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu_login)
 
+        val intent = Intent(this,MenuLogado::class.java)
+
+        val sharedPref: SharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+        val user:String? = sharedPref.getString(R.string.userlog.toString(), null);
+
+        if(user !=null){
+            startActivity(intent)
+            finish()
+        }
 
     }
 
     fun logar(view: View) {
+        val sharedPref: SharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
         val intent = Intent(this,MenuLogado::class.java)
 
         val user = findViewById<EditText>(R.id.editTextTextPersonName).text.toString();
@@ -39,6 +55,10 @@ class MenuLogin : AppCompatActivity() {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 if (response.isSuccessful){
                     if(response.body()!!.status){
+                        with(sharedPref.edit()) {
+                            putString(R.string.userlog.toString(), user)
+                            commit()
+                        }
                         startActivity(intent)
                         finish()
                     }else{

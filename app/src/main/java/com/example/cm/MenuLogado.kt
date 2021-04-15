@@ -1,7 +1,9 @@
 package com.example.cm
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -44,8 +46,17 @@ class MenuLogado : AppCompatActivity() {
     }
 
     fun logout(view: View) {
-        val intent = Intent(this,MainActivity::class.java)
-        startActivity(intent)
+        val intent = Intent(this, MainActivity::class.java)
+
+        val sharedPref: SharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+        with(sharedPref.edit()) {
+            putString(com.example.cm.R.string.userlog.toString(), null)
+            commit()
+
+            startActivity(intent)
+        }
     }
 
     fun vermapa(view: View) {
