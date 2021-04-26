@@ -32,9 +32,10 @@ class MenuLogado : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            val titulo = data?.getStringExtra(criarnota.EXTRA_REPLY_NOME)
-            val descricacao= data?.getStringExtra(criarnota.EXTRA_REPLY_DESCRICAO)
-
+            val titulo = data?.getStringExtra(CriarOccor.EXTRA_REPLY_NOME)
+            val descricacao= data?.getStringExtra(CriarOccor.EXTRA_REPLY_DESCRICAO)
+            val lat= data?.getStringExtra(CriarOccor.EXTRA_REPLY_LAT)
+            val lon= data?.getStringExtra(CriarOccor.EXTRA_REPLY_LON)
 
         } else {
         }
@@ -53,6 +54,7 @@ class MenuLogado : AppCompatActivity() {
 
         with(sharedPref.edit()) {
             putString(com.example.cm.R.string.userlog.toString(), null)
+            putInt(com.example.cm.R.string.userid.toString(), 0)
             commit()
 
             startActivity(intent)
