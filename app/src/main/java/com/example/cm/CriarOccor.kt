@@ -15,23 +15,34 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.toBitmap
+import com.example.cm.API.EndPoints
+import com.example.cm.API.Problema
+import com.example.cm.API.ServiceBuilder
+import com.example.cm.API.User
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.activity_criar_occor.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.*
 
 class CriarOccor : AppCompatActivity() {
 
     private lateinit var nome: EditText
-    private lateinit var descricao: EditText
-    private lateinit var lastLocation: Location
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var mMap: GoogleMap
+    private lateinit var descri: EditText
 
     val REQUEST_IMAGE_CAPTURE = 1
 
@@ -42,7 +53,7 @@ class CriarOccor : AppCompatActivity() {
 
 
         nome = findViewById(R.id.titulo)
-        descricao = findViewById(R.id.descr)
+        descri = findViewById(R.id.descr)
 
         btncamera.setOnClickListener {
             //if system os is Marshmallow or Above, we need to request runtime permission
@@ -57,46 +68,60 @@ class CriarOccor : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button7)
         button.setOnClickListener {
 
-            if(ActivityCompat.checkSelfPermission(this,
-                            android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(this,
-                        arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), CriarOccor.LOCATION_PERMISSION_REQUEST_CODE)
-
-            }else{
-                mMap.isMyLocationEnabled = true
-
-                fusedLocationClient.lastLocation.addOnSuccessListener(this){
-                    location ->
-                    if(location != null){
-                        lastLocation = location;
-
                         val sharedPref: SharedPreferences = getSharedPreferences(
                                 getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
-                        val userid:Int? = sharedPref.getInt(R.string.userid.toString(), 0);
 
                         val replyIntent = Intent()
                         if (TextUtils.isEmpty(nome.text)) {
                             Toast.makeText(this,"Titulo necessario", Toast.LENGTH_LONG).show()
                         } else {
-                            /*
-                            replyIntent.putExtra(EXTRA_REPLY_NOME, nome.text.toString())
-                            replyIntent.putExtra(EXTRA_REPLY_DESCRICAO, descricao.text.toString())
-                            replyIntent.putExtra(EXTRA_REPLY_LAT, location.latitude.toString())
-                            replyIntent.putExtra(EXTRA_REPLY_LON, location.longitude.toString())
-                            replyIntent.putExtra(EXTRA_REPLY_ID,userid)
-                            setResult(Activity.RESULT_OK, replyIntent)
-                            Toast.makeText(this,"Criado com sucesso", Toast.LENGTH_LONG).show()
-                            */
 
+                            val sharedPref: SharedPreferences = getSharedPreferences(
+                                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+                            val userid:Int? = sharedPref.getInt(R.string.userid.toString(), 0);
+                            val latitude:String? = sharedPref.getString(R.string.lat.toString(), "lat")
+                            val longitude:String? = sharedPref.getString(R.string.lon.toString(), "lon");
+
+                            val request = ServiceBuilder.buildService(EndPoints::class.java)
+
+                            val imgBitmap: Bitmap = findViewById<ImageView>(R.id.image_view).drawable.toBitmap()
+                            val imgFile: File = convertBitmapToFile("file", imgBitmap)
+                            val imgFileRequest: RequestBody = RequestBody.create(MediaType.parse("image/*"), imgFile)
+                            val imagem: MultipartBody.Part = MultipartBody.Part.createFormData("imagem", imgFile.name, imgFileRequest)
+
+                            val titulo: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),nome.text.toString())
+                            val descricao: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),descri.text.toString())
+                            val lat: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),latitude)
+                            val lon: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),longitude)
+                            val utilizador: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),userid.toString())
+                            val tipo: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),"obras")
+
+
+                            val call = request.inserirOcorr(titulo,descricao,lat,lon,imagem,utilizador,tipo)
+                            call.enqueue(object : Callback<Problema> {
+                                override fun onResponse(call: Call<Problema>, response: Response<Problema>) {
+                                    if (response.isSuccessful){
+                                        if(response.body()!!.status){
+                                            Toast.makeText(this@CriarOccor, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                                            Log.d("hello","hello");
+
+                                            finish()
+                                        }else{
+                                            Log.d("hello33","hello33");
+                                            Toast.makeText(this@CriarOccor, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                                        }
+
+                                    }
+                                }
+                                override fun onFailure(call: Call<Problema>, t: Throwable) {
+                                    Toast.makeText(this@CriarOccor, "${t.message}", Toast.LENGTH_LONG).show()
+                                    Log.d("caralho" , t.message)
+                                }
+                            })
                             finish()
                         }
-                    }
-                }
-            }
-
-
-
         }
 
     }
@@ -104,24 +129,36 @@ class CriarOccor : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imagem = data?.extras?.get("data") as Bitmap
-            image_view.setImageBitmap(imagem)
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            image_view.setImageBitmap(imageBitmap)
         }
     }
 
+    private fun convertBitmapToFile(fileName: String, bitmap: Bitmap): File {
+        //create a file to write bitmap data
+        val file = File(this@CriarOccor.cacheDir, fileName)
+        file.createNewFile()
 
-    companion object {
-        const val EXTRA_REPLY_NOME = "nome"
-        const val EXTRA_REPLY_DESCRICAO = "descricao"
-        const val EXTRA_REPLY_LAT = "lat"
-        const val EXTRA_REPLY_LON = "long"
-        const val EXTRA_REPLY_ID = "id"
-        // add to implement last known location
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        //added to implement location periodic updates
-        private const val REQUEST_CHECK_SETTINGS = 2
+        //Convert bitmap to byte array
+        val bos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, bos)
+        val bitMapData = bos.toByteArray()
+
+        //write the bytes in file
+        var fos: FileOutputStream? = null
+        try {
+            fos = FileOutputStream(file)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        }
+        try {
+            fos?.write(bitMapData)
+            fos?.flush()
+            fos?.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return file
     }
-
-
 
 }

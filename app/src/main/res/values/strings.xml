@@ -27,4 +27,6 @@
     <string name="preference_file_key">file1</string>
     <string name="title_activity_maps">Map</string>
     <string name="userid">1</string>
+    <string name="lat">lat</string>
+    <string name="lon">lon</string>
 </resources>

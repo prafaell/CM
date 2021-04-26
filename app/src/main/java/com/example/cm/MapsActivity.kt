@@ -1,5 +1,7 @@
 package com.example.cm
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +54,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     for (problema in problemas){
                         position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                         mMap.addMarker(MarkerOptions().position(position).title(problema.titulo))
+
                     }
 
                 }
@@ -85,6 +88,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun setUpMap(){
+
+        val sharedPref: SharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
         if(ActivityCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
@@ -100,6 +107,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     lastLocation = location;
                     val currentLatLong = LatLng(location.latitude,location.longitude)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong, 12f))
+
+                    with(sharedPref.edit()) {
+                        putString(com.example.cm.R.string.lat.toString(), location.latitude.toString())
+                        putString(com.example.cm.R.string.lon.toString(),location.longitude.toString())
+                        commit()
+                    }
                 }
             }
         }

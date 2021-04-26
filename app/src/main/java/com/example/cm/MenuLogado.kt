@@ -28,18 +28,6 @@ class MenuLogado : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            val titulo = data?.getStringExtra(CriarOccor.EXTRA_REPLY_NOME)
-            val descricacao= data?.getStringExtra(CriarOccor.EXTRA_REPLY_DESCRICAO)
-            val lat= data?.getStringExtra(CriarOccor.EXTRA_REPLY_LAT)
-            val lon= data?.getStringExtra(CriarOccor.EXTRA_REPLY_LON)
-
-        } else {
-        }
-    }
 
     fun myNotes(view: View) {
         val intent = Intent(this,ListaNotas::class.java)
