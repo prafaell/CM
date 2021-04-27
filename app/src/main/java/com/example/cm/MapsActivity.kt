@@ -1,5 +1,7 @@
 package com.example.cm
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
@@ -45,13 +48,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val call = request.getReports()
         var position: LatLng
 
+        val sharedPref: SharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+        val userid:Int? = sharedPref.getInt(R.string.userid.toString(), 1);
+
         call.enqueue(object : Callback<List<Problema>> {
             override fun onResponse(call: Call<List<Problema>>, response: Response<List<Problema>>) {
                 if (response.isSuccessful){
                     problemas = response.body()!!
                     for (problema in problemas){
                         position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
-                        mMap.addMarker(MarkerOptions().position(position).title(problema.titulo))
+                        if(problema.utilizador_id == userid){
+                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                        }else{
+                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                        }
+
                     }
 
                 }
