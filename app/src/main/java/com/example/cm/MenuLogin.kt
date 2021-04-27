@@ -57,6 +57,7 @@ class MenuLogin : AppCompatActivity() {
                     if(response.body()!!.status){
                         with(sharedPref.edit()) {
                             putString(R.string.userlog.toString(), user)
+                            putInt(R.string.userid.toString(), 0)
                             commit()
                         }
                         startActivity(intent)
