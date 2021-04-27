@@ -118,11 +118,8 @@ class CriarOccor : AppCompatActivity() {
                                     if (response.isSuccessful){
                                         if(response.body()!!.status){
                                             Toast.makeText(this@CriarOccor, response.body()!!.MSG, Toast.LENGTH_LONG).show()
-                                            Log.d("hello","hello");
-
                                             finish()
                                         }else{
-                                            Log.d("hello33","hello33");
                                             Toast.makeText(this@CriarOccor, response.body()!!.MSG, Toast.LENGTH_LONG).show()
                                         }
 
@@ -130,7 +127,6 @@ class CriarOccor : AppCompatActivity() {
                                 }
                                 override fun onFailure(call: Call<Problema>, t: Throwable) {
                                     Toast.makeText(this@CriarOccor, "${t.message}", Toast.LENGTH_LONG).show()
-                                    Log.d("caralho" , t.message)
                                 }
                             })
                             finish()
