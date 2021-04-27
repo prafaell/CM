@@ -22,4 +22,7 @@
     <string name="Guardar">Guardar</string>
     <string name="delete">Eliminado com sucesso</string>
     <string name="foto">Tirar foto</string>
+    <string name="obras">Obras</string>
+    <string name="acidente">Acidente</string>
+    <string name="perigo">Perigo</string>
 </resources>

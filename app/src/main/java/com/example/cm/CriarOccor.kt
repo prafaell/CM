@@ -16,10 +16,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.example.cm.API.EndPoints
@@ -52,9 +49,26 @@ class CriarOccor : AppCompatActivity() {
         setContentView(R.layout.activity_criar_occor)
 
 
+
+        val spinner: Spinner = findViewById(R.id.spinner)
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+                this,
+                R.array.tipos,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+
+
         nome = findViewById(R.id.titulo)
         descri = findViewById(R.id.descr)
 
+
+        val btncamera = findViewById<Button>(R.id.btncamera)
         btncamera.setOnClickListener {
             //if system os is Marshmallow or Above, we need to request runtime permission
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
@@ -62,7 +76,6 @@ class CriarOccor : AppCompatActivity() {
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                 }
             }
-
         }
 
         val button = findViewById<Button>(R.id.button7)
@@ -96,7 +109,7 @@ class CriarOccor : AppCompatActivity() {
                             val lat: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),latitude)
                             val lon: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),longitude)
                             val utilizador: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),userid.toString())
-                            val tipo: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),"obras")
+                            val tipo: RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"),spinner.selectedItem.toString())
 
 
                             val call = request.inserirOcorr(titulo,descricao,lat,lon,imagem,utilizador,tipo)

@@ -29,4 +29,13 @@
     <string name="userid">1</string>
     <string name="lat">lat</string>
     <string name="lon">lon</string>
+    <string name="obras">Construction</string>
+    <string name="perigo">Hazard</string>
+    <string name="acidente">Accident</string>
+
+    <string-array name="tipos">
+        <item>@string/obras</item>
+        <item>@string/perigo</item>
+        <item>@string/acidente</item>
+    </string-array>
 </resources>
