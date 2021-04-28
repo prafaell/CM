@@ -38,4 +38,5 @@
         <item>@string/perigo</item>
         <item>@string/acidente</item>
     </string-array>
+    <string name="tudo">All</string>
 </resources>

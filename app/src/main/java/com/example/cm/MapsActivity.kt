@@ -7,6 +7,9 @@ import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.example.cm.API.EndPoints
@@ -256,4 +259,115 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return results[0];
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.menuobras->{
+                val request = ServiceBuilder.buildService(EndPoints::class.java)
+                val sharedPref: SharedPreferences = getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+                val userid:Int? = sharedPref.getInt(R.string.userid.toString(), 1);
+
+                mMap.clear()
+                val call = request.getProblemasPorTipo("Obras")
+                call.enqueue(object : Callback<List<Problema>> {
+                    override fun onResponse(call: Call<List<Problema>>, response:Response<List<Problema>>){
+                        if (response.isSuccessful){
+                            problemas = response.body()!!
+                            for (problema in problemas){
+                                val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                                if(problema.utilizador_id == userid){
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                }else{
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                }
+                            }
+
+                        }
+                    }
+                    override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
+                        Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                    }
+                })
+
+                true
+            }
+            R.id.menuacidente->{
+                val request = ServiceBuilder.buildService(EndPoints::class.java)
+                val sharedPref: SharedPreferences = getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+                val userid:Int? = sharedPref.getInt(R.string.userid.toString(), 1);
+
+                mMap.clear()
+                val call = request.getProblemasPorTipo("Acidente")
+                call.enqueue(object : Callback<List<Problema>> {
+                    override fun onResponse(call: Call<List<Problema>>, response:Response<List<Problema>>){
+                        if (response.isSuccessful){
+                            problemas = response.body()!!
+                            for (problema in problemas){
+                                val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                                if(problema.utilizador_id == userid){
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                }else{
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                }
+                            }
+
+                        }
+                    }
+                    override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
+                        Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                    }
+                })
+
+                true
+            }
+            R.id.menuperigo->{
+                val request = ServiceBuilder.buildService(EndPoints::class.java)
+                val sharedPref: SharedPreferences = getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+                val userid:Int? = sharedPref.getInt(R.string.userid.toString(), 1);
+
+                mMap.clear()
+                val call = request.getProblemasPorTipo("Perigo")
+                call.enqueue(object : Callback<List<Problema>> {
+                    override fun onResponse(call: Call<List<Problema>>, response:Response<List<Problema>>){
+                        if (response.isSuccessful){
+                            problemas = response.body()!!
+                            for (problema in problemas){
+                                val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                                if(problema.utilizador_id == userid){
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                }else{
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                }
+                            }
+
+                        }
+                    }
+                    override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
+                        Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                    }
+                })
+
+                true
+            }
+            else ->super.onOptionsItemSelected(item)
+        }
+    }
+
+
 }

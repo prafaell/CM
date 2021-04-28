@@ -27,4 +27,8 @@ interface EndPoints {
         @Part("tipo") tipo: RequestBody
 
     ): Call<Problema>
+
+    @FormUrlEncoded
+    @POST("myslim/api/tipo")
+    fun getProblemasPorTipo(@Field("tipo") first: String?): Call<List<Problema>>
 }
