@@ -81,9 +81,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         btn100.setOnClickListener{
-            val call = request.getReportsPorDistancia(sharedPref.getInt(R.string.userid.toString(), 0),pw);
-            call.enqueue(object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: Response<User>) {
+            val call = request.getReportsPorDistancia(sharedPref.getString(R.string.lat.toString(), "lat"),sharedPref.getString(R.string.lon.toString(),"lon"),0.1f);
+            call.enqueue(object : Callback<Problema> {
+                override fun onResponse(call: Call<Problema>, response: Response<Problema>) {
                     if (response.isSuccessful){
                         if(response.body()!!.status){
                             with(sharedPref.edit()) {
@@ -94,13 +94,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             startActivity(intent)
                             finish()
                         }else{
-                            Toast.makeText(this@MenuLogin, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@MapsActivity, response.body()!!.MSG, Toast.LENGTH_LONG).show()
                         }
 
                     }
                 }
-                override fun onFailure(call: Call<User>, t: Throwable) {
-                    Toast.makeText(this@MenuLogin, "${t.message}", Toast.LENGTH_LONG).show()
+                override fun onFailure(call: Call<Problema>, t: Throwable) {
+                    Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
                 }
             })
 
