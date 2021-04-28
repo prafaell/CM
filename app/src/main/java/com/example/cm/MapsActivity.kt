@@ -81,30 +81,120 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         btn100.setOnClickListener{
-            val call = request.getReportsPorDistancia(sharedPref.getString(R.string.lat.toString(), "lat"),sharedPref.getString(R.string.lon.toString(),"lon"),0.1f);
-            call.enqueue(object : Callback<Problema> {
-                override fun onResponse(call: Call<Problema>, response: Response<Problema>) {
+            mMap.clear()
+            val call = request.getReports()
+            call.enqueue(object : Callback<List<Problema>> {
+                override fun onResponse(call: Call<List<Problema>>, response:Response<List<Problema>>){
                     if (response.isSuccessful){
-                        if(response.body()!!.status){
-                            with(sharedPref.edit()) {
-                                putString(R.string.userlog.toString(), user)
-                                putInt(R.string.userid.toString(),response.body()!!.id)
-                                commit()
-                            }
-                            startActivity(intent)
-                            finish()
-                        }else{
-                            Toast.makeText(this@MapsActivity, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                        problemas = response.body()!!
+                        for (problema in problemas){
+                            position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                            val dist =  calcularDist(problema.lat.toString().toDouble(),problema.lon.toString().toDouble(),
+                                            sharedPref.getString(R.string.lat.toString(),"lat")!!.toDouble() ,sharedPref.getString(R.string.lon.toString(), "lon")!!.toDouble() )
+
+                          if(dist <= 100){
+                              if(problema.utilizador_id == userid){
+                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                          .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                              }else{
+                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                              }
+                          }
                         }
 
                     }
                 }
-                override fun onFailure(call: Call<Problema>, t: Throwable) {
+                override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
                     Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
                 }
             })
-
         }
+
+        btn500.setOnClickListener{
+            mMap.clear()
+            val call = request.getReports()
+            call.enqueue(object : Callback<List<Problema>> {
+                override fun onResponse(call: Call<List<Problema>>, response:Response<List<Problema>>){
+                    if (response.isSuccessful){
+                        problemas = response.body()!!
+                        for (problema in problemas){
+                            position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                            val dist =  calcularDist(problema.lat.toString().toDouble(),problema.lon.toString().toDouble(),
+                                    sharedPref.getString(R.string.lat.toString(),"lat")!!.toDouble() ,sharedPref.getString(R.string.lon.toString(), "lon")!!.toDouble() )
+
+                            if(dist <= 500){
+                                if(problema.utilizador_id == userid){
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                }else{
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                }
+                            }
+                        }
+
+                    }
+                }
+                override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
+                    Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
+        btn1000.setOnClickListener{
+            mMap.clear()
+            val call = request.getReports()
+            call.enqueue(object : Callback<List<Problema>> {
+                override fun onResponse(call: Call<List<Problema>>, response:Response<List<Problema>>){
+                    if (response.isSuccessful){
+                        problemas = response.body()!!
+                        for (problema in problemas){
+                            position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                            val dist =  calcularDist(problema.lat.toString().toDouble(),problema.lon.toString().toDouble(),
+                                    sharedPref.getString(R.string.lat.toString(),"lat")!!.toDouble() ,sharedPref.getString(R.string.lon.toString(), "lon")!!.toDouble() )
+
+                            if(dist <= 1000){
+                                if(problema.utilizador_id == userid){
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                }else{
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                }
+                            }
+                        }
+
+                    }
+                }
+                override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
+                    Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
+        btnall.setOnClickListener {
+            mMap.clear()
+            val call = request.getReports()
+            call.enqueue(object : Callback<List<Problema>> {
+                override fun onResponse(call: Call<List<Problema>>, response:Response<List<Problema>>){
+                    if (response.isSuccessful){
+                        problemas = response.body()!!
+                        for (problema in problemas){
+                            position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
+                                if(problema.utilizador_id == userid){
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                }else{
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                }
+                        }
+
+                    }
+                }
+                override fun onFailure(call: Call<List<Problema>>, t: Throwable) {
+                    Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
     }
 
     /**
@@ -130,6 +220,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     fun setUpMap(){
+
+        val sharedPref: SharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
         if(ActivityCompat.checkSelfPermission(this,
                         android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,
@@ -145,8 +239,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     lastLocation = location;
                     val currentLatLong = LatLng(location.latitude,location.longitude)
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong, 12f))
+
+                    with(sharedPref.edit()) {
+                        putString(com.example.cm.R.string.lat.toString(), location.latitude.toString())
+                        putString(com.example.cm.R.string.lon.toString(),location.longitude.toString())
+                        commit()
+                    }
                 }
             }
         }
+    }
+
+    fun calcularDist(lat1:Double,lng1:Double, lat2:Double, lng2:Double): Float{
+        var results = FloatArray(1)
+        Location.distanceBetween(lat1,lng1,lat2,lng2,results)
+
+        return results[0];
     }
 }

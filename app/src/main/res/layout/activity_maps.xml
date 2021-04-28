@@ -16,8 +16,8 @@
 
     <Button
         android:id="@+id/btn100"
-        android:layout_width="95dp"
-        android:layout_height="55dp"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="12dp"
         android:text="100m"
@@ -26,24 +26,32 @@
 
     <Button
         android:id="@+id/btn500"
-        android:layout_width="95dp"
-        android:layout_height="55dp"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="12dp"
         android:text="500m"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/map"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/map" />
+        app:layout_constraintEnd_toStartOf="@+id/btn1000"
+        app:layout_constraintStart_toEndOf="@+id/btn100" />
 
     <Button
         android:id="@+id/btn1000"
-        android:layout_width="95dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="32dp"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="124dp"
         android:layout_marginBottom="12dp"
         android:text="1KM"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/btnall"
+        android:layout_width="77dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/tudo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

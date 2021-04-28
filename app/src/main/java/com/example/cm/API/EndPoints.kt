@@ -15,5 +15,6 @@ interface EndPoints {
 
     @FormUrlEncoded
     @POST("myslim/api/distancia")
-    fun getReportsPorDistancia(@Field("latFrom") first: String?,@Field("lonFrom") second: String?,@Field("raio") third: Float?): Call<Problema>
+    fun getReportsPorDistancia(@Field("lat") first: String?,@Field("lon") second: String?,@Field("raio") third: Float?):  Call<List<Problema>>
+
 }

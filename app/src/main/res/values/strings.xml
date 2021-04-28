@@ -29,4 +29,5 @@
     <string name="userid">1</string>
     <string name="lat">lat</string>
     <string name="lon">lon</string>
+    <string name="tudo">All</string>
 </resources>
