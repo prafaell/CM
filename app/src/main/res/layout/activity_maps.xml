@@ -5,20 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".MapsActivity">
 
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"></fragment>
-
+        tools:layout_editor_absoluteX="-52dp"
+        tools:layout_editor_absoluteY="-37dp"></fragment>
 
     <Button
         android:id="@+id/btn100"
         android:layout_width="77dp"
         android:layout_height="40dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="12dp"
         android:text="100m"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,6 +28,8 @@
         android:id="@+id/btn500"
         android:layout_width="77dp"
         android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="12dp"
         android:text="500m"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,11 +40,11 @@
         android:id="@+id/btn1000"
         android:layout_width="77dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="124dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="12dp"
         android:text="1KM"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btnall" />
 
     <Button
         android:id="@+id/btnall"
