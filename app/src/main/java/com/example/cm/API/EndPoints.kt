@@ -12,4 +12,8 @@ interface EndPoints {
     @FormUrlEncoded
     @POST("myslim/api/login")
     fun getLogin(@Field("user") first: String?,@Field("pw") second: String?): Call<User>
+
+    @FormUrlEncoded
+    @POST("myslim/api/distancia")
+    fun getReportsPorDistancia(@Field("latFrom") first: String?,@Field("lonFrom") second: String?,@Field("raio") third: Int?): Call<User>
 }

@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import com.example.cm.API.EndPoints
 import com.example.cm.API.Problema
 import com.example.cm.API.ServiceBuilder
+import com.example.cm.API.User
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_maps.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -76,6 +78,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this@MapsActivity, "${t.message}", Toast.LENGTH_LONG).show()
             }
         })
+
+
+        btn100.setOnClickListener{
+            val call = request.getReportsPorDistancia(sharedPref.getInt(R.string.userid.toString(), 0),pw);
+            call.enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (response.isSuccessful){
+                        if(response.body()!!.status){
+                            with(sharedPref.edit()) {
+                                putString(R.string.userlog.toString(), user)
+                                putInt(R.string.userid.toString(),response.body()!!.id)
+                                commit()
+                            }
+                            startActivity(intent)
+                            finish()
+                        }else{
+                            Toast.makeText(this@MenuLogin, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                        }
+
+                    }
+                }
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    Toast.makeText(this@MenuLogin, "${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+
+        }
     }
 
     /**
