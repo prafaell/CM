@@ -26,4 +26,6 @@
     <string name="acidente">Acidente</string>
     <string name="perigo">Perigo</string>
     <string name="tudo">Tudo</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="tipo">Tipo</string>
 </resources>

@@ -31,4 +31,8 @@ interface EndPoints {
     @FormUrlEncoded
     @POST("myslim/api/tipo")
     fun getProblemasPorTipo(@Field("tipo") first: String?): Call<List<Problema>>
+
+
+    @GET("myslim/api/problemaPorID/{id}")
+    fun getProblemaPorID(@Path("id") id: String): Call<Problema>
 }

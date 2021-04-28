@@ -39,4 +39,6 @@
         <item>@string/acidente</item>
     </string-array>
     <string name="tudo">All</string>
+    <string name="eliminar">Delete</string>
+    <string name="tipo">Type</string>
 </resources>

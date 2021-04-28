@@ -1,6 +1,7 @@
 package com.example.cm
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
@@ -25,13 +26,14 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_maps.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWindowClickListener{
 
     private lateinit var mMap: GoogleMap
     private lateinit var problemas: List<Problema>
@@ -68,9 +70,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                         if(problema.utilizador_id == userid){
                             mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
+
                         }else{
-                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                         }
 
                     }
@@ -98,9 +101,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                           if(dist <= 100){
                               if(problema.utilizador_id == userid){
                                   mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                          .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                          .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                               }else{
-                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                               }
                           }
                         }
@@ -128,9 +131,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             if(dist <= 500){
                                 if(problema.utilizador_id == userid){
                                     mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                                 }
                             }
                         }
@@ -158,9 +161,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             if(dist <= 1000){
                                 if(problema.utilizador_id == userid){
                                     mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                                 }
                             }
                         }
@@ -184,9 +187,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
                                     mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                                 }
                         }
 
@@ -211,8 +214,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.setOnInfoWindowClickListener(this)
 
         setUpMap()
+    }
+
+    override fun onInfoWindowClick(marker: Marker){
+        val intent = Intent(this, OcorrAlterar::class.java).apply {
+            putExtra(EXTRA_REPLY_ID, marker.tag.toString())
+        }
+        startActivity(intent)
     }
 
     companion object {
@@ -220,6 +231,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         //added to implement location periodic updates
         private const val REQUEST_CHECK_SETTINGS = 2
+        const val EXTRA_REPLY_ID = "ID"
     }
 
     fun setUpMap(){
@@ -286,9 +298,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
                                     mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                                 }
                             }
 
@@ -318,9 +330,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
                                     mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                                 }
                             }
 
@@ -350,9 +362,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
                                     mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
-                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao))
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
                                 }
                             }
 
@@ -368,6 +380,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             else ->super.onOptionsItemSelected(item)
         }
     }
-
-
 }
