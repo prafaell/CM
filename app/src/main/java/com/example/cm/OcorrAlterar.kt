@@ -47,7 +47,11 @@ class OcorrAlterar : AppCompatActivity() {
 
                     Log.d("CARALHO",problema.imagem)
 
-                    Picasso.get().load("https://smartcitycm2021.000webhostapp.com/myslim/api/imagens/" + problema.imagem + ".png").into(imageview);
+                    if(!problema.imagem.isNullOrEmpty()){
+                        Picasso.get().load("https://smartcitycm2021.000webhostapp.com/myslim/api/imagens/" + problema.imagem + ".png").into(imageview);
+                    }
+
+
                 }
             }
             override fun onFailure(call: Call<Problema>, t: Throwable) {
