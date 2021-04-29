@@ -17,11 +17,11 @@
     <string name="first_fragment_label">label</string>
     <string name="second_fragment_label">label2</string>
     <string name="inserirnota">Create New</string>
-    <string name="nomenota">Name</string>
+    <string name="nomenota">Title</string>
     <string name="descricaonota">Description</string>
     <string name="criar">Create</string>
     <string name="Guardar">Save</string>
-    <string name="delete">Delete sucessfuly</string>
+    <string name="delete">Delete sucessful</string>
     <string name="foto">Take picture</string>
     <string name="userlog">userlog</string>
     <string name="preference_file_key">file1</string>
@@ -41,4 +41,13 @@
     <string name="tudo">All</string>
     <string name="eliminar">Delete</string>
     <string name="tipo">Type</string>
+    <string name="permissao">No permission</string>
+    <string name="apagado">Deleted successfully</string>
+    <string name="erro">Error</string>
+    <string name="alterado">Change successfully</string>
+    <string name="login">Login successful</string>
+    <string name="loginerrado">Username or password incorrect</string>
+    <string name="camposvazios">Some fiels are empty</string>
+    <string name="titulovazio">Title empty</string>
+    <string name="criadosucesso">Created successfully</string>
 </resources>

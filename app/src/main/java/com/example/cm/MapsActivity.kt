@@ -1,5 +1,6 @@
 package com.example.cm
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -17,8 +18,7 @@ import com.example.cm.API.EndPoints
 import com.example.cm.API.Problema
 import com.example.cm.API.ServiceBuilder
 import com.example.cm.API.User
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -39,6 +39,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
     private lateinit var problemas: List<Problema>
     private lateinit var lastLocation: Location
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallBack: LocationCallback
+
+    //added to implement location periodic updates
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
 
 
 
@@ -52,13 +57,45 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        val sharedPref: SharedPreferences = getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+
+        //location callback
+        locationCallBack = object: LocationCallback(){
+            override fun onLocationResult(p0: LocationResult?) {
+                super.onLocationResult(p0)
+                if (p0 != null) {
+                    lastLocation = p0.lastLocation
+                }
+                var loc = LatLng(lastLocation.latitude,lastLocation.longitude)
+                if (ActivityCompat.checkSelfPermission(
+                        this@MapsActivity,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this@MapsActivity,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
+                }
+                mMap.isMyLocationEnabled = true
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 12f))
+
+                with(sharedPref.edit()) {
+                    putString(com.example.cm.R.string.lat.toString(),lastLocation.latitude.toString())
+                    putString(com.example.cm.R.string.lon.toString(),lastLocation.longitude.toString())
+                    commit()
+                }
+            }
+        }
+
+        createLocationRequest()
+
 
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         val call = request.getReports()
         var position: LatLng
 
-        val sharedPref: SharedPreferences = getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
 
         val userid:Int? = sharedPref.getInt(R.string.userid.toString(), 1);
 
@@ -69,11 +106,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
                     for (problema in problemas){
                         position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                         if(problema.utilizador_id == userid){
-                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
-
                         }else{
-                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                            mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                         }
 
                     }
@@ -100,10 +136,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
 
                           if(dist <= 100){
                               if(problema.utilizador_id == userid){
-                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                           .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                               }else{
-                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                                  mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                               }
                           }
                         }
@@ -130,10 +166,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
 
                             if(dist <= 500){
                                 if(problema.utilizador_id == userid){
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                                 }
                             }
                         }
@@ -160,10 +196,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
 
                             if(dist <= 1000){
                                 if(problema.utilizador_id == userid){
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                                 }
                             }
                         }
@@ -186,10 +222,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
                         for (problema in problemas){
                             position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                                 }
                         }
 
@@ -212,11 +248,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
      * it inside the SupportMapFragment. This method will onlya be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
+    private fun createLocationRequest(){
+        locationRequest = LocationRequest()
+
+        locationRequest.interval = 1000
+        locationRequest.priority =  LocationRequest.PRIORITY_HIGH_ACCURACY
+    }
+
+    override fun onPause(){
+        super.onPause()
+        fusedLocationClient.removeLocationUpdates(locationCallBack)
+    }
+
+    public override fun onResume(){
+        super.onResume()
+        startLocationUpdates()
+    }
+
+    private fun startLocationUpdates(){
+        if(ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+
+            return
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest,locationCallBack,null)
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnInfoWindowClickListener(this)
 
-        setUpMap()
     }
 
     override fun onInfoWindowClick(marker: Marker){
@@ -234,36 +299,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
         const val EXTRA_REPLY_ID = "ID"
     }
 
-    fun setUpMap(){
-
-        val sharedPref: SharedPreferences = getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-
-        if(ActivityCompat.checkSelfPermission(this,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
-
-            return
-        }else{
-            mMap.isMyLocationEnabled = true
-
-            fusedLocationClient.lastLocation.addOnSuccessListener(this){
-                location ->
-                if(location != null){
-                    lastLocation = location;
-                    val currentLatLong = LatLng(location.latitude,location.longitude)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong, 12f))
-
-                    with(sharedPref.edit()) {
-                        putString(com.example.cm.R.string.lat.toString(), location.latitude.toString())
-                        putString(com.example.cm.R.string.lon.toString(),location.longitude.toString())
-                        commit()
-                    }
-                }
-            }
-        }
-    }
 
     fun calcularDist(lat1:Double,lng1:Double, lat2:Double, lng2:Double): Float{
         var results = FloatArray(1)
@@ -297,10 +332,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
                             for (problema in problemas){
                                 val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                                 }
                             }
 
@@ -329,10 +364,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
                             for (problema in problemas){
                                 val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                                 }
                             }
 
@@ -361,10 +396,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnInfoWin
                             for (problema in problemas){
                                 val position = LatLng(problema.lat.toString().toDouble(), problema.lon.toString().toDouble())
                                 if(problema.utilizador_id == userid){
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)
                                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))).setTag(problema.id.toString())
                                 }else{
-                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.descricao)).setTag(problema.id.toString())
+                                    mMap.addMarker(MarkerOptions().position(position).title(problema.titulo).snippet(problema.tipo)).setTag(problema.id.toString())
                                 }
                             }
 

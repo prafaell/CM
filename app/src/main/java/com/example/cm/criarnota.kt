@@ -26,12 +26,12 @@ class criarnota : AppCompatActivity() {
         button.setOnClickListener {
             val replyIntent = Intent()
             if (TextUtils.isEmpty(nome.text)) {
-                Toast.makeText(this,"Titulo necessario", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,getString(R.string.titulovazio), Toast.LENGTH_LONG).show()
             } else {
                 replyIntent.putExtra(EXTRA_REPLY_NOME, nome.text.toString())
                 replyIntent.putExtra(EXTRA_REPLY_DESCRICAO, descricao.text.toString())
                 setResult(Activity.RESULT_OK, replyIntent)
-                Toast.makeText(this,"Criado com sucesso", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,getString(R.string.criadosucesso), Toast.LENGTH_LONG).show()
                 finish()
             }
 

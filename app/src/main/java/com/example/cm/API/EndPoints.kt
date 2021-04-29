@@ -35,4 +35,11 @@ interface EndPoints {
 
     @GET("myslim/api/problemaPorID/{id}")
     fun getProblemaPorID(@Path("id") id: String): Call<Problema>
+
+    @GET("myslim/api/eliminar/{id}")
+    fun getEliminarPorID(@Path("id") id: String): Call<Problema>
+
+    @FormUrlEncoded
+    @POST("myslim/api/alterar")
+    fun getAlterarPorID(@Field("id") first: String,@Field("titulo") second: String?,@Field("descricao") third: String?): Call<Problema>
 }

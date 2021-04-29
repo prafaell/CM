@@ -16,7 +16,7 @@
     <string name="first_fragment_label">label</string>
     <string name="second_fragment_label">label2</string>
     <string name="inserirnota">Nova Nota</string>
-    <string name="nomenota">Nome</string>
+    <string name="nomenota">Titulo</string>
     <string name="descricaonota">Descrição</string>
     <string name="criar">Criar</string>
     <string name="Guardar">Guardar</string>
@@ -28,4 +28,13 @@
     <string name="tudo">Tudo</string>
     <string name="eliminar">Eliminar</string>
     <string name="tipo">Tipo</string>
+    <string name="permissao">Não tem permissão</string>
+    <string name="apagado">Eliminado com Sucesso</string>
+    <string name="erro">Erro</string>
+    <string name="alterado">Alterado com sucesso</string>
+    <string name="login">Login com sucesso</string>
+    <string name="loginerrado">Username ou password errado</string>
+    <string name="camposvazios">Campos vazios</string>
+    <string name="titulovazio">Titulo vazio</string>
+    <string name="criadosucesso">Criado com sucesso</string>
 </resources>

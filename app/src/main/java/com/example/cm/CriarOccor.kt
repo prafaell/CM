@@ -87,7 +87,7 @@ class CriarOccor : AppCompatActivity() {
 
                         val replyIntent = Intent()
                         if (TextUtils.isEmpty(nome.text)) {
-                            Toast.makeText(this,"Titulo necessario", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this,getString(R.string.titulovazio), Toast.LENGTH_LONG).show()
                         } else {
 
                             val sharedPref: SharedPreferences = getSharedPreferences(
@@ -117,10 +117,10 @@ class CriarOccor : AppCompatActivity() {
                                 override fun onResponse(call: Call<Problema>, response: Response<Problema>) {
                                     if (response.isSuccessful){
                                         if(response.body()!!.status){
-                                            Toast.makeText(this@CriarOccor, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                                            Toast.makeText(this@CriarOccor, getString(R.string.criadosucesso), Toast.LENGTH_LONG).show()
                                             finish()
                                         }else{
-                                            Toast.makeText(this@CriarOccor, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                                            Toast.makeText(this@CriarOccor, getString(R.string.erro), Toast.LENGTH_LONG).show()
                                         }
 
                                     }

@@ -52,7 +52,7 @@ class ListaNotas : AppCompatActivity(),LineAdapter.CallbackInterface {
 
      override fun passResultCallback(message: Int?) {
         notaViewModel.deleteByID(message)
-        Toast.makeText(this,"Eliminado com sucesso", LENGTH_LONG).show()
+        Toast.makeText(this,getString(R.string.apagado), LENGTH_LONG).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

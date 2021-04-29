@@ -60,11 +60,12 @@ class MenuLogin : AppCompatActivity() {
                             Log.d("IDIDID",response.body()!!.id.toString())
                             putInt(R.string.userid.toString(),response.body()!!.id)
                             commit()
+                            Toast.makeText(this@MenuLogin, getString(R.string.login), Toast.LENGTH_LONG).show()
                         }
                         startActivity(intent)
                         finish()
                     }else{
-                        Toast.makeText(this@MenuLogin, response.body()!!.MSG, Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MenuLogin, getString(R.string.loginerrado), Toast.LENGTH_LONG).show()
                     }
 
                 }
